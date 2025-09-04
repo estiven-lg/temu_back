@@ -1,8 +1,11 @@
+
 using Microsoft.AspNetCore.Mvc;
 using temu_back.Models;
+using temu_back.Models.DTOs;
 using temu_back.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace temu_back.Controllers
 {
@@ -17,36 +20,82 @@ namespace temu_back.Controllers
 			_orderService = orderService;
 		}
 
-		[HttpGet]
-		public async Task<ActionResult<IEnumerable<Order>>> GetAll()
-		{
-			var orders = await _orderService.GetAllAsync();
-			return Ok(orders);
-		}
 
-		[HttpGet("{id}")]
-		public async Task<ActionResult<Order>> GetById(int id)
-		{
-			var order = await _orderService.GetByIdAsync(id);
-			if (order == null) return NotFound();
-			return Ok(order);
-		}
+			[HttpGet]
+			public async Task<ActionResult<IEnumerable<OrderReadDto>>> GetAll()
+			{
+				var orders = await _orderService.GetAllAsync();
+				var dtos = orders.Select(o => new OrderReadDto
+				{
+					Id = o.Id,
+					PersonId = o.PersonId,
+					Number = o.Number,
+					CreatedAt = o.CreatedAt,
+					UpdatedAt = o.UpdatedAt
+				});
+				return Ok(dtos);
+			}
 
-		[HttpPost]
-		public async Task<ActionResult<Order>> Create(Order order)
-		{
-			var created = await _orderService.AddAsync(order);
-			return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
-		}
 
-		[HttpPut("{id}")]
-		public async Task<ActionResult<Order>> Update(int id, Order order)
-		{
-			if (id != order.Id) return BadRequest();
-			var updated = await _orderService.UpdateAsync(order);
-			if (updated == null) return NotFound();
-			return Ok(updated);
-		}
+			[HttpGet("{id}")]
+			public async Task<ActionResult<OrderReadDto>> GetById(int id)
+			{
+				var order = await _orderService.GetByIdAsync(id);
+				if (order == null) return NotFound();
+				var dto = new OrderReadDto
+				{
+					Id = order.Id,
+					PersonId = order.PersonId,
+					Number = order.Number,
+					CreatedAt = order.CreatedAt,
+					UpdatedAt = order.UpdatedAt
+				};
+				return Ok(dto);
+			}
+
+
+			[HttpPost]
+			public async Task<ActionResult<OrderReadDto>> Create(OrderWriteDto dto)
+			{
+				var order = new Order
+				{
+					PersonId = dto.PersonId,
+					Number = dto.Number,
+					CreatedAt = DateTime.UtcNow
+				};
+				var created = await _orderService.AddAsync(order);
+				var readDto = new OrderReadDto
+				{
+					Id = created.Id,
+					PersonId = created.PersonId,
+					Number = created.Number,
+					CreatedAt = created.CreatedAt,
+					UpdatedAt = created.UpdatedAt
+				};
+				return CreatedAtAction(nameof(GetById), new { id = readDto.Id }, readDto);
+			}
+
+
+			[HttpPut("{id}")]
+			public async Task<ActionResult<OrderReadDto>> Update(int id, OrderWriteDto dto)
+			{
+				var existing = await _orderService.GetByIdAsync(id);
+				if (existing == null) return NotFound();
+				existing.PersonId = dto.PersonId;
+				existing.Number = dto.Number;
+				existing.UpdatedAt = DateTime.UtcNow;
+				var updated = await _orderService.UpdateAsync(existing);
+				if (updated == null) return NotFound();
+				var readDto = new OrderReadDto
+				{
+					Id = updated.Id,
+					PersonId = updated.PersonId,
+					Number = updated.Number,
+					CreatedAt = updated.CreatedAt,
+					UpdatedAt = updated.UpdatedAt
+				};
+				return Ok(readDto);
+			}
 
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> Delete(int id)
