@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+
 namespace temu_back.Models
 {
     public class Item
@@ -9,6 +11,7 @@ namespace temu_back.Models
         public required decimal Price { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        [JsonIgnore]
         public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
     }
 }
