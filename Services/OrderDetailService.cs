@@ -38,5 +38,9 @@ namespace temu_back.Services
 		{
 			return await _orderDetailRepository.DeleteAsync(id);
 		}
+		public async Task<IEnumerable<OrderDetail>> GetByOrderIdAsync(int orderId)
+		{
+			return await _orderDetailRepository.GetByOrderIdAsync(orderId);
+		}
 	}
 }

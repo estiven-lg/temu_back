@@ -49,5 +49,12 @@ namespace temu_back.Repositories
 			await _context.SaveChangesAsync();
 			return true;
 		}
+
+		public async Task<IEnumerable<OrderDetail>> GetByOrderIdAsync(int orderId)
+		{
+			return await _context.OrderDetails
+				.Where(od => od.OrderId == orderId)
+				.ToListAsync();
+		}
 	}
 }

@@ -11,5 +11,6 @@ namespace temu_back.Repositories
 		Task<OrderDetail> AddAsync(OrderDetail orderDetail);
 		Task<OrderDetail?> UpdateAsync(OrderDetail orderDetail);
 		Task<bool> DeleteAsync(int id);
+		Task<IEnumerable<OrderDetail>> GetByOrderIdAsync(int orderId);
 	}
 }

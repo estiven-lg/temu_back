@@ -5,16 +5,9 @@ namespace temu_back.Models
     {
         public int Id { get; set; }
         public required int OrderId { get; set; }
-        public Order Order { get; set; } = new Order
-        {
-            PersonId = 0,
-        };
+        public Order Order { get; set; } = null!;
         public required int ItemId { get; set; }
-        public Item Item { get; set; } = new Item
-        {
-            Name = string.Empty,
-            Price = 0
-        };
+        public Item Item { get; set; } = null!;
         public int Quantity { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public required decimal Price { get; set; }

@@ -122,5 +122,23 @@ namespace temu_back.Controllers
 			if (!deleted) return NotFound();
 			return NoContent();
 		}
+
+		[HttpGet("ByOrder/{orderId}")]
+		public async Task<ActionResult<IEnumerable<OrderDetailReadDto>>> GetByOrderId(int orderId)
+		{
+			var details = await _orderDetailService.GetByOrderIdAsync(orderId);
+			var dtos = details.Select(d => new OrderDetailReadDto
+			{
+				Id = d.Id,
+				OrderId = d.OrderId,
+				ItemId = d.ItemId,
+				Quantity = d.Quantity,
+				Price = d.Price,
+				Total = d.Total,
+				CreatedAt = d.CreatedAt,
+				UpdatedAt = d.UpdatedAt
+			});
+			return Ok(dtos);
+		}
 	}
 }
