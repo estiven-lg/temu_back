@@ -17,12 +17,12 @@ namespace temu_back.Repositories
 
 		public async Task<IEnumerable<OrderDetail>> GetAllAsync()
 		{
-			return await _context.OrderDetails.ToListAsync();
+			return await _context.OrderDetails.Include(od => od.Item).ToListAsync();
 		}
 
 		public async Task<OrderDetail?> GetByIdAsync(int id)
 		{
-			return await _context.OrderDetails.FindAsync(id);
+			return await _context.OrderDetails.Include(od => od.Item).FirstOrDefaultAsync(od => od.Id == id);
 		}
 
 		public async Task<OrderDetail> AddAsync(OrderDetail orderDetail)
@@ -54,6 +54,7 @@ namespace temu_back.Repositories
 		{
 			return await _context.OrderDetails
 				.Where(od => od.OrderId == orderId)
+				.Include(od => od.Item)
 				.ToListAsync();
 		}
 	}

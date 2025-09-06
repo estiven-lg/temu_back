@@ -31,7 +31,13 @@ namespace temu_back.Controllers
 					PersonId = o.PersonId,
 					Number = o.Number,
 					CreatedAt = o.CreatedAt,
-					UpdatedAt = o.UpdatedAt
+					UpdatedAt = o.UpdatedAt,
+					Person = new PersonReadDto
+					{
+						Id = o.Person.Id,
+						FirstName = o.Person.FirstName,
+						LastName = o.Person.LastName
+					}
 				});
 				return Ok(dtos);
 			}

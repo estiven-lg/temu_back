@@ -33,7 +33,13 @@ namespace temu_back.Controllers
 					Quantity = d.Quantity,
 					Price = d.Price,
 					CreatedAt = d.CreatedAt,
-					UpdatedAt = d.UpdatedAt
+					UpdatedAt = d.UpdatedAt,
+					Item = new ItemReadDto
+					{
+						Id = d.Item.Id,
+						Name = d.Item.Name,
+						Price = d.Item.Price
+					}
 				});
 				return Ok(dtos);
 			}
@@ -135,7 +141,13 @@ namespace temu_back.Controllers
 				Price = d.Price,
 				Total = d.Total,
 				CreatedAt = d.CreatedAt,
-				UpdatedAt = d.UpdatedAt
+				UpdatedAt = d.UpdatedAt,
+				Item = new ItemReadDto
+				{
+					Id = d.Item.Id,
+					Name = d.Item.Name,
+					Price = d.Item.Price
+				}
 			});
 			return Ok(dtos);
 		}

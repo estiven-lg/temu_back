@@ -17,12 +17,12 @@ namespace temu_back.Repositories
 
 		public async Task<IEnumerable<Order>> GetAllAsync()
 		{
-			return await _context.Orders.ToListAsync();
+			return await _context.Orders.Include(o => o.Person).ToListAsync();
 		}
 
 		public async Task<Order?> GetByIdAsync(int id)
 		{
-			return await _context.Orders.FindAsync(id);
+			return await _context.Orders.Include(o => o.Person).FirstOrDefaultAsync(o => o.Id == id);
 		}
 
 		public async Task<Order> AddAsync(Order order)
