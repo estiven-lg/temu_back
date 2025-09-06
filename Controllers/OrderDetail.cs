@@ -32,7 +32,6 @@ namespace temu_back.Controllers
 					ItemId = d.ItemId,
 					Quantity = d.Quantity,
 					Price = d.Price,
-					Total = d.Total,
 					CreatedAt = d.CreatedAt,
 					UpdatedAt = d.UpdatedAt
 				});
@@ -69,7 +68,7 @@ namespace temu_back.Controllers
 					ItemId = dto.ItemId,
 					Quantity = dto.Quantity,
 					Price = dto.Price,
-					Total = dto.Total,
+					Total = dto.Quantity * dto.Price,
 					CreatedAt = DateTime.UtcNow
 				};
 				var created = await _orderDetailService.AddAsync(orderDetail);
